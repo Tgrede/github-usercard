@@ -1,9 +1,32 @@
+import axios from 'axios';
 /*
   STEP 1: using axios, send a GET request to the following URL
     (replacing the placeholder with your Github name):
     https://api.github.com/users/<your name>
 */
 
+// axios
+// .get('https://api.github.com/users/tgrede')
+// .then(function (res) {
+//   const user = res.data
+//   const userObj = {
+//     imgUrl:user.avatar_url, 
+//     nameOfUser:user.name, 
+//     userNameOfUser:user.login, 
+//     locationOfUser:user.location, 
+//     webLink:user.html_url, 
+//     followerCount:user.followers, 
+//     followingCount:user.following, 
+//     bioOfUser:user.bio
+//   }
+//   const newCard = createCard(userObj)
+//   document.querySelector('.cards').appendChild(newCard)
+
+// })
+// .catch(function (err) {
+//   console.log("error: ", err);
+// })
+ 
 /*
   STEP 2: Inspect and study the data coming back, this is YOUR
     github info! You will need to understand the structure of this
@@ -28,7 +51,30 @@
     user, and adding that card to the DOM.
 */
 
-const followersArray = [];
+const followersArray = ['tgrede', 'umbralith', 'tetondan', 'dustinmyers', 'justsml', 'luishrd', 'bigknell'];
+followersArray.forEach((user) => {
+  axios
+  .get(`https://api.github.com/users/${user}`)
+  .then(function (res) {
+    const user = res.data
+    const userObj = {
+      imgUrl:user.avatar_url, 
+      nameOfUser:user.name, 
+      userNameOfUser:user.login, 
+      locationOfUser:user.location, 
+      webLink:user.html_url, 
+      followerCount:user.followers, 
+      followingCount:user.following, 
+      bioOfUser:user.bio
+    }
+    const newCard = createCard(userObj)
+    document.querySelector('.cards').appendChild(newCard)
+  
+  })
+  .catch(function (err) {
+    console.log("error: ", err);
+  })
+})
 
 /*
   STEP 3: Create a function that accepts a single object as its only argument.
@@ -49,6 +95,52 @@ const followersArray = [];
       </div>
     </div>
 */
+
+function createCard({imgUrl, nameOfUser, userNameOfUser, locationOfUser, webLink, followerCount, followingCount, bioOfUser}){
+  const card = document.createElement('div')
+  const image = document.createElement('img')
+  const cardInfo = document.createElement('div')
+  const name = document.createElement('h3')
+  const userName = document.createElement('p')
+  const location = document.createElement('p')
+  const profile = document.createElement('p')
+  const link = document.createElement('a')
+  const followers = document.createElement('p')
+  const following = document.createElement('p')
+  const bio = document.createElement('p')
+
+  card.classList.add('card')
+  cardInfo.classList.add('card-info')
+  name.classList.add('name')
+  userName.classList.add('username')
+
+  image.src = imgUrl
+
+  name.textContent = nameOfUser
+  userName.textContent = userNameOfUser
+  location.textContent = `Location: ${locationOfUser}`
+  link.href = webLink
+  profile.textContent = 'Profile: '
+  link.textContent = webLink
+  followers.textContent = `Followers: ${followerCount}`
+  following.textContent = `Following: ${followingCount}`
+  bio.textContent = `Bio: ${bioOfUser}`
+
+  card.appendChild(image)
+  card.appendChild(cardInfo)
+  cardInfo.appendChild(name)
+  cardInfo.appendChild(userName)
+  cardInfo.appendChild(location)
+  profile.appendChild(link)
+  cardInfo.appendChild(profile)
+  cardInfo.appendChild(followers)
+  cardInfo.appendChild(following)
+  cardInfo.appendChild(bio)
+
+  return card
+
+}
+
 
 /*
   List of LS Instructors Github username's:
